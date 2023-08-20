@@ -1,7 +1,10 @@
 package com.example.urldownloadtool.requests;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -21,17 +24,22 @@ public class RequestController {
 
     }
 
-    @PostMapping("/api/returnPost")
-    public String returnPostData(RequestClass myRequest, RequestService myService,@RequestParam(name="id") String id, @RequestParam(name="url") String url){
+    
 
-        myService.idParameter = id;
-        myService.urlParameter = url;
+    @PostMapping("/api/processing")
+    public void processVideo(@RequestParam(name="url") String urlParam,DownloadPreparationService downloadprepService) throws IOException, InterruptedException{
 
-        // myservice.processVideo();
+        // Safe clients passed Parameter to a variable 
+        downloadprepService.safeUrlParam(urlParam);
 
-        return myService.returnParams();
+        // this starts the download process it uses the path to yt-dlp binary and the passed parameter URL to download a video
+        downloadprepService.runDownloader();
 
+        // return the video as download to the client
+        downloadprepService.clientDownload();
 
+        downloadprepService.clientDownload();
+       
     }
 
     
