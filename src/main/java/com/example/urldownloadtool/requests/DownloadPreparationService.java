@@ -1,10 +1,14 @@
 package com.example.urldownloadtool.requests;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -39,8 +43,10 @@ public class DownloadPreparationService {
         // Arguments for yt-dlp has to be added to the processbuilder like "-o video.mp4" which will be then the name of the downloaded video 
         ProcessBuilder myProcessBuilder = new ProcessBuilder(binaryAndmyURL.pathToBinary,"-o video.mp4",binaryAndmyURL.myUrl);
         String currentDirectory = System.getProperty("user.dir");
+
         myProcessBuilder.directory(new File(currentDirectory));
         Process myProcess = myProcessBuilder.start();
+
         System.out.println("Video Download began...");
         int exitCode = myProcess.waitFor();
         System.out.println("Downloaded Video to Server !");
@@ -49,14 +55,23 @@ public class DownloadPreparationService {
     }
 
     // Returns a Video download to the Client called video.mp4
-   public ResponseEntity<Resource> clientDownload() {
-        Resource videoResource = new ClassPathResource("");
+   public ResponseEntity<InputStreamResource> clientDownload() throws FileNotFoundException {
+        // Provide the path to the downloaded video file
+        String videoFilePath = "video.mp4";
+        File videoFile = new File(videoFilePath);
 
-        
+        InputStream videoInputStream = new FileInputStream(videoFile);
+        InputStreamResource inputStreamResource = new InputStreamResource(videoInputStream);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDispositionFormData("attachment", "video.mp4");
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+        // Return the video as a ResponseEntity
         return ResponseEntity.ok()
-            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=video.mp4")
-            .contentType(MediaType.APPLICATION_OCTET_STREAM)
-            .body(videoResource);
+                .headers(headers)
+                .contentLength(videoFile.length())
+                .body(inputStreamResource);
     }
 
 
