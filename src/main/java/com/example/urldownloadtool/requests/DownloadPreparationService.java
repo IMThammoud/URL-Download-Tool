@@ -71,11 +71,6 @@ public class DownloadPreparationService {
         headers.setContentDispositionFormData("attachment", "video.mp4");
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 
-        // COMMENTED THIS OUT, HAVE TO FIND A WAY WHERE THE VIDEO IS DELETED AFTER RETURNED TO THE CLIENT
-        //ProcessBuilder deletionOfVideo = new ProcessBuilder("rm","video.mp4");
-        //Process deletionProcess = deletionOfVideo.start();
-        //int exitCode = deletionProcess.waitFor();
-
         // Return the video as a ResponseEntity
         // Put the Video in the Body of the HTTP-Response
         return ResponseEntity.ok()
