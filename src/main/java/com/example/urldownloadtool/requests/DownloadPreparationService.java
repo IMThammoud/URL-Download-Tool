@@ -41,7 +41,7 @@ public class DownloadPreparationService {
     public void runDownloader() throws IOException, InterruptedException{
         // binaryAndMyURL.myURL has to be set first with safeUrlParam() before executing this method here > first safeUrlParam() then runDownloader()
         // Arguments for yt-dlp has to be added to the processbuilder like "-o video.mp4" which will be then the name of the downloaded video 
-        ProcessBuilder myProcessBuilder = new ProcessBuilder(binaryAndmyURL.pathToBinary,"-o video.mp4",binaryAndmyURL.myUrl);
+        ProcessBuilder myProcessBuilder = new ProcessBuilder(binaryAndmyURL.pathToBinary,"-o","video.mp4",binaryAndmyURL.myUrl);
         String currentDirectory = System.getProperty("user.dir");
 
         myProcessBuilder.directory(new File(currentDirectory));
@@ -49,25 +49,35 @@ public class DownloadPreparationService {
 
         System.out.println("Video Download began...");
         int exitCode = myProcess.waitFor();
+        
         System.out.println("Downloaded Video to Server !");
 
 
     }
 
     // Returns a Video download to the Client called video.mp4
-   public ResponseEntity<InputStreamResource> clientDownload() throws FileNotFoundException {
+   public ResponseEntity<InputStreamResource> clientDownload() throws IOException, InterruptedException {
         // Provide the path to the downloaded video file
-        String videoFilePath = "video.mp4";
-        File videoFile = new File(videoFilePath);
+        // use the System.property "user.dir" and add the location of the downloaded File so this code can process it
+        String currentDirectory = System.getProperty("user.dir");
+        File videoFile = new File(currentDirectory + "/video.mp4");
 
+        // Put the Video into a Input Stream and make a InputStream Resource out of it
         InputStream videoInputStream = new FileInputStream(videoFile);
         InputStreamResource inputStreamResource = new InputStreamResource(videoInputStream);
 
+        // Initialize new HTTP-Headers 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDispositionFormData("attachment", "video.mp4");
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 
+        // COMMENTED THIS OUT, HAVE TO FIND A WAY WHERE THE VIDEO IS DELETED AFTER RETURNED TO THE CLIENT
+        //ProcessBuilder deletionOfVideo = new ProcessBuilder("rm","video.mp4");
+        //Process deletionProcess = deletionOfVideo.start();
+        //int exitCode = deletionProcess.waitFor();
+
         // Return the video as a ResponseEntity
+        // Put the Video in the Body of the HTTP-Response
         return ResponseEntity.ok()
                 .headers(headers)
                 .contentLength(videoFile.length())
