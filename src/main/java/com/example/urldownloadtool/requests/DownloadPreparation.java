@@ -28,7 +28,7 @@ public class DownloadPreparation {
     // choose between Linux or Windows Binary (only for testing locally)
     public void setBinaryType(){
         if (System.getProperty("os.name").equals("Windows 10")) {
-            setPathToBinary("start yt-dlp.exe");
+            setPathToBinary(".\\yt-dlp.exe");
         }
     }
 
