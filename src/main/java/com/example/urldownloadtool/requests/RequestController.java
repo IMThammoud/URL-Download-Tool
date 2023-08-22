@@ -31,6 +31,8 @@ public class RequestController {
     
     @PostMapping("/api/processing")
     public ResponseEntity<InputStreamResource> processVideo(@RequestParam(name="url") String urlParam,DownloadPreparationService downloadprepService) throws IOException, InterruptedException{
+       ProcessBuilder myProcessBuilder = new ProcessBuilder("rm","video.mp4");
+       Process deleteVideoFile = myProcessBuilder.start();
 
         // Safe clients passed Parameter to a variable 
         downloadprepService.safeUrlParam(urlParam);
@@ -38,9 +40,9 @@ public class RequestController {
         // this starts the download process it uses the path to yt-dlp binary and the passed parameter URL to download a video
         downloadprepService.runDownloader();
 
-        // return the video as download to the client
-        
 
+
+        // return the video as download to the client
         return downloadprepService.clientDownload();
        
     }

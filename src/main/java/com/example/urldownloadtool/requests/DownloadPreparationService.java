@@ -13,15 +13,20 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import jakarta.servlet.http.HttpServletResponse;
 
 
-
+@Service
 public class DownloadPreparationService {
     DownloadPreparation binaryAndmyURL = new DownloadPreparation();
-    
+
+    // Provide the path to the downloaded video file
+    // use the System.property "user.dir" and add the location of the downloaded File so this code can process it
+    String currentDirectory = System.getProperty("user.dir");
+    File videoFile = new File(currentDirectory + "/video.mp4");
    
     
     
@@ -58,26 +63,31 @@ public class DownloadPreparationService {
 
     // Returns a Video download to the Client called video.mp4
    public ResponseEntity<InputStreamResource> clientDownload() throws IOException, InterruptedException {
-        // Provide the path to the downloaded video file
-        // use the System.property "user.dir" and add the location of the downloaded File so this code can process it
-        String currentDirectory = System.getProperty("user.dir");
-        File videoFile = new File(currentDirectory + "/video.mp4");
+
 
         // Put the Video into a Input Stream and make a InputStream Resource out of it
         InputStream videoInputStream = new FileInputStream(videoFile);
-        InputStreamResource inputStreamResource = new InputStreamResource(videoInputStream);
+        InputStreamResource streamResource = new InputStreamResource(videoInputStream);
+        // after the InputStream wrote the video to inputStreamResource, the stream can be closed
+
+
 
         // Initialize new HTTP-Headers 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentDispositionFormData("attachment", "video.mp4");
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 
+        // if the video File exists then delete it from server
+        // this makes sure that the clients Videos don't stay on the server after download
+
+
+
         // Return the video as a ResponseEntity
         // Put the Video in the Body of the HTTP-Response
         return ResponseEntity.ok()
                 .headers(headers)
                 .contentLength(videoFile.length())
-                .body(inputStreamResource);
+                .body(streamResource);
     }
 
 
