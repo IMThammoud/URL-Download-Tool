@@ -26,7 +26,7 @@ public class DownloadPreparationService {
     
     
     
-    // this safes the URL-Paremeter to the objects myURL variable.
+    // these safes the URL-Parameter to the objects myURL variable.
     public void safeUrlParam(String url){
         
         binaryAndmyURL.myUrl = url;
@@ -40,7 +40,8 @@ public class DownloadPreparationService {
 
     public void runDownloader() throws IOException, InterruptedException{
         // binaryAndMyURL.myURL has to be set first with safeUrlParam() before executing this method here > first safeUrlParam() then runDownloader()
-        // Arguments for yt-dlp has to be added to the processbuilder like "-o video.mp4" which will be then the name of the downloaded video 
+        // Arguments for yt-dlp has to be added to the processbuilder like "-o video.mp4" which will be then the name of the downloaded video
+        binaryAndmyURL.setBinaryType();
         ProcessBuilder myProcessBuilder = new ProcessBuilder(binaryAndmyURL.pathToBinary,"-o","video.mp4",binaryAndmyURL.myUrl);
         String currentDirectory = System.getProperty("user.dir");
 
