@@ -1,6 +1,7 @@
 package com.example.urldownloadtool.requests;
 
 import java.lang.management.OperatingSystemMXBean;
+import java.util.UUID;
 
 public class DownloadPreparation {
     // this class serves as preparation for the Parameters ( ID and URL)
@@ -8,6 +9,9 @@ public class DownloadPreparation {
 
     String pathToBinary = "./yt-dlp";
     String myUrl;
+
+    // Unique Random Video name for each download
+    String uniqueVideoName = "videos/" + UUID.randomUUID().toString()+".mp4";
 
     public String getPathToBinary() {
         return pathToBinary;

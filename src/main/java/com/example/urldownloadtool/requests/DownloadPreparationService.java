@@ -2,31 +2,24 @@ package com.example.urldownloadtool.requests;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
-import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import jakarta.servlet.http.HttpServletResponse;
 
 
 @Service
 public class DownloadPreparationService {
-    DownloadPreparation binaryAndmyURL = new DownloadPreparation();
+    DownloadPreparation myDownloadObject = new DownloadPreparation();
 
     // Provide the path to the downloaded video file
     // use the System.property "user.dir" and add the location of the downloaded File so this code can process it
     String currentDirectory = System.getProperty("user.dir");
-    File videoFile = new File(currentDirectory + "/video.mp4");
+    File videoFile = new File(currentDirectory +"/"+ myDownloadObject.uniqueVideoName);
    
     
     
@@ -34,20 +27,20 @@ public class DownloadPreparationService {
     // these safes the URL-Parameter to the objects myURL variable.
     public void safeUrlParam(String url){
         
-        binaryAndmyURL.myUrl = url;
+        myDownloadObject.myUrl = url;
     }
 
     // to test output
     public String showValueOfUrl(){
         
-        return "Value of changed myURL Variable: "+ binaryAndmyURL.myUrl;
+        return "Value of changed myURL Variable: "+ myDownloadObject.myUrl;
     }
 
     public void runDownloader() throws IOException, InterruptedException{
         // binaryAndMyURL.myURL has to be set first with safeUrlParam() before executing this method here > first safeUrlParam() then runDownloader()
-        // Arguments for yt-dlp has to be added to the processbuilder like "-o video.mp4" which will be then the name of the downloaded video
-        binaryAndmyURL.setBinaryType();
-        ProcessBuilder myProcessBuilder = new ProcessBuilder(binaryAndmyURL.pathToBinary,"-o","video.mp4",binaryAndmyURL.myUrl);
+        // Arguments for yt-dlp has to be added to the processbuilder like "-o video.mp4" which will specify the path where the video will be downloaded
+        myDownloadObject.setBinaryType();
+        ProcessBuilder myProcessBuilder = new ProcessBuilder(myDownloadObject.pathToBinary,"-o" + myDownloadObject.uniqueVideoName, myDownloadObject.myUrl);
         String currentDirectory = System.getProperty("user.dir");
 
         myProcessBuilder.directory(new File(currentDirectory));
@@ -65,7 +58,7 @@ public class DownloadPreparationService {
    public ResponseEntity<InputStreamResource> clientDownload() throws IOException, InterruptedException {
 
 
-        // Put the Video into a Input Stream and make a InputStream Resource out of it
+        // Put the Video into an Input Stream and make a InputStream Resource out of it
         InputStream videoInputStream = new FileInputStream(videoFile);
         InputStreamResource streamResource = new InputStreamResource(videoInputStream);
         // after the InputStream wrote the video to inputStreamResource, the stream can be closed
@@ -74,7 +67,7 @@ public class DownloadPreparationService {
 
         // Initialize new HTTP-Headers 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentDispositionFormData("attachment", "video.mp4");
+        headers.setContentDispositionFormData("attachment", myDownloadObject.uniqueVideoName);
         headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 
         // if the video File exists then delete it from server
