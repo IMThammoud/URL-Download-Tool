@@ -19,6 +19,7 @@ public class DownloadPreparationService {
     // Provide the path to the downloaded video file
     // use the System.property "user.dir" and add the location of the downloaded File so this code can process it
     String currentDirectory = System.getProperty("user.dir");
+    // The Path to the Video
     File videoFile = new File(currentDirectory +"/"+ myDownloadObject.uniqueVideoName);
    
     
@@ -37,8 +38,8 @@ public class DownloadPreparationService {
     }
 
     public void runDownloader() throws IOException, InterruptedException{
-        // binaryAndMyURL.myURL has to be set first with safeUrlParam() before executing this method here > first safeUrlParam() then runDownloader()
-        // Arguments for yt-dlp has to be added to the processbuilder like "-o video.mp4" which will specify the path where the video will be downloaded
+        // myDownloadObject.myURL has to be set first with safeUrlParam() before executing this method here > first safeUrlParam() then runDownloader()
+        // Arguments for yt-dlp has to be added to the processbuilder like "-o videos/video.mp4" which will specify the path where the video will be downloaded
         myDownloadObject.setBinaryType();
         ProcessBuilder myProcessBuilder = new ProcessBuilder(myDownloadObject.pathToBinary,"-o" + myDownloadObject.uniqueVideoName, myDownloadObject.myUrl);
         String currentDirectory = System.getProperty("user.dir");
