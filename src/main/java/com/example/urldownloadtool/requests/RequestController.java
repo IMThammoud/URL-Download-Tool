@@ -16,19 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RequestController {
     
-    @GetMapping("/api/showRequests")
-    public ArrayList<RequestClass> showRequests(RequestClass myRequest,RequestService myService){
-
-        // adds requests to a List
-        myService.sumRequestsIntoList(myRequest);
-        
-
-        return myService.returnListOfRequests();
-
-    }
-
-    
-    
     @PostMapping("/api/processing")
     public ResponseEntity<InputStreamResource> processVideo(@RequestParam(name="url") String urlParam,DownloadPreparationService downloadprepService) throws IOException, InterruptedException{
 
