@@ -13,4 +13,4 @@ For local testing purposes there is a Windows binary too.
 * Build a juicy Front-End for that sweet Eye-Candy.
 * ~~Define the location of yt-dlp Binary INSIDE of the compiled .Jar File so only the .Jar File has to be deployed as a single File.~~
 * ---> Downloads and Binary will be contained in Path where Jar is executed
-* Build Scheduled Jobs to delete the videos from the Server after Client download
+~~* Build Scheduled Jobs to delete the videos from the Server after Client download~~
