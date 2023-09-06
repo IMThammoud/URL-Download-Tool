@@ -14,3 +14,4 @@ For local testing purposes there is a Windows binary too.
 * ~~Define the location of yt-dlp Binary INSIDE of the compiled .Jar File so only the .Jar File has to be deployed as a single File.~~
 * ---> Downloads and Binary will be contained in Path where Jar is executed
 ~~* Build Scheduled Jobs to delete the videos from the Server after Client download~~
+* --> Schedule to delete is working, need to compare video date with current date and delete it if its older than 5 minutes
