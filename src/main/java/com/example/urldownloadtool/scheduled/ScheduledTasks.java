@@ -44,8 +44,8 @@ public class ScheduledTasks {
                     long difference = Instant.now().toEpochMilli() - fileDateInMilliSeconds;
                     log.info("Difference: {}{}",file.toString(),difference);
 
-                    // If there are more than 5 Minutes between the currentDate and FileDate, then delete the file
-                    if (difference > 300000) {
+                    // If there are more than 10 Minutes between the currentDate and FileDate, then delete the file
+                    if (difference > 600000) {
                         log.info("currentDate: "+ Instant.now().toEpochMilli() + " And file date: "+ fileDateInMilliSeconds);
 
                         log.info("Deleted: "+ file.toString()+ " from server.");
