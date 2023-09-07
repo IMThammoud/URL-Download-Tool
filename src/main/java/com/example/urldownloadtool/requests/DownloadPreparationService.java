@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.time.Instant;
 
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -47,8 +48,12 @@ public class DownloadPreparationService {
         myProcessBuilder.directory(new File(currentDirectory));
         Process myProcess = myProcessBuilder.start();
 
+
+
         System.out.println("Video Download began...");
         int exitCode = myProcess.waitFor();
+        // videoFile needs a fresh LastModified Date, set it to NOW
+        videoFile.setLastModified(Instant.now().toEpochMilli());
         
         System.out.println("Downloaded Video to Server !");
 

@@ -6,7 +6,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Component
 public class ScheduledTasks {
@@ -15,8 +20,7 @@ public class ScheduledTasks {
     private static final String userDir = System.getProperty("user.dir");
     private static final String videoFolder= userDir+ "/videos/";
 
-    Date currentDate = new Date();
-    long currentDateInMilliSeconds = currentDate.getTime();
+
 
 
 
@@ -33,10 +37,18 @@ public class ScheduledTasks {
             for (File file : videosInFolder
             ) {
                 if (file.isFile()) {
-                    // compare current date and last modified date of file and delete it when it's older than 5 minutes
-                    long fileDateInMilliseconds = file.lastModified();
-                    if (currentDateInMilliSeconds - fileDateInMilliseconds > 300000) {
-                        log.info("currentDate: "+ currentDateInMilliSeconds + " And file date: "+ fileDateInMilliseconds);
+                    // Store fileDate in Millisecs, format the fileDate to LocalDateTime-Format to compare currentDate and FileDate
+                    long fileDateInMilliSeconds = file.lastModified();
+
+                    // difference between currentDateinMilliseconds and fileDateInMilliseconds
+                    long difference = Instant.now().toEpochMilli() - fileDateInMilliSeconds;
+                    log.info("Difference: {}{}",file.toString(),difference);
+
+                    // If there are more than 5 Minutes between the currentDate and FileDate, then delete the file
+                    if (difference > 300000) {
+                        log.info("currentDate: "+ Instant.now().toEpochMilli() + " And file date: "+ fileDateInMilliSeconds);
+
+                        log.info("Deleted: "+ file.toString()+ " from server.");
                         file.delete();
                     }
                 }
