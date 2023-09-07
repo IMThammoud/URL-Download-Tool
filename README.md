@@ -6,7 +6,7 @@ This project is supposed to run on Linux x86 servers and is only for testing pur
 For local testing purposes there is a Windows binary too.
 
 # To Do List:
-
+* Check if URL Form is empty before submitting on clientSide or Send error Response from Server if URL is invalid
 * ~~Find a way to give the downloaded video an unique name for each Request (ServerSide).~~
 * ~~Let the App handle concurrent Requests so Requests do not interrupt each other.~~
 * ~~Add options to select MP3 or MP4 Download (Or more).~~
