@@ -1,6 +1,5 @@
 package com.example.urldownloadtool.requests;
 
-import java.lang.management.OperatingSystemMXBean;
 import java.util.UUID;
 
 public class DownloadPreparation {
@@ -12,6 +11,7 @@ public class DownloadPreparation {
 
     // Unique Random Video name for each download
     String uniqueVideoName = "videos/" + UUID.randomUUID().toString()+".mp4";
+    String getUniqueVideoNameAudio = "videos/" + UUID.randomUUID().toString()+".m4a";
 
     public String getPathToBinary() {
         return pathToBinary;

@@ -22,6 +22,7 @@ public class DownloadPreparationService {
     String currentDirectory = System.getProperty("user.dir");
     // The Path to the Video
     File videoFile = new File(currentDirectory +"/"+ myDownloadObject.uniqueVideoName);
+    File audioFile = new File(currentDirectory +"/"+ myDownloadObject.getUniqueVideoNameAudio);
    
     
     
@@ -38,6 +39,7 @@ public class DownloadPreparationService {
         return "Value of changed myURL Variable: "+ myDownloadObject.myUrl;
     }
 
+    // downloads a video file in .mp4 format
     public void runDownloader() throws IOException, InterruptedException{
         // myDownloadObject.myURL has to be set first with safeUrlParam() before executing this method here > first safeUrlParam() then runDownloader()
         // Arguments for yt-dlp has to be added to the processbuilder like "-o videos/video.mp4" which will specify the path where the video will be downloaded
@@ -59,8 +61,30 @@ public class DownloadPreparationService {
 
 
     }
+    // Downloads an audioFile in .m4a format
+    public void runDownloaderAudio() throws IOException, InterruptedException{
+        // myDownloadObject.myURL has to be set first with safeUrlParam() before executing this method here > first safeUrlParam() then runDownloader()
+        // Arguments for yt-dlp has to be added to the processbuilder like "-o videos/video.mp4" which will specify the path where the video will be downloaded
+        myDownloadObject.setBinaryType();
+        ProcessBuilder myProcessBuilder = new ProcessBuilder(myDownloadObject.pathToBinary,"-f","140","-o" + myDownloadObject.getUniqueVideoNameAudio, myDownloadObject.myUrl);
+        String currentDirectory = System.getProperty("user.dir");
 
-    // Returns a Video download to the Client called video.mp4
+        myProcessBuilder.directory(new File(currentDirectory));
+        Process myProcess = myProcessBuilder.start();
+
+
+
+        System.out.println("Video Download began...");
+        int exitCode = myProcess.waitFor();
+        // videoFile needs a fresh LastModified Date, set it to NOW
+        audioFile.setLastModified(Instant.now().toEpochMilli());
+
+        System.out.println("Downloaded Video to Server !");
+
+
+    }
+
+    // Returns a Video download to the Client with unique name
    public ResponseEntity<InputStreamResource> clientDownload() throws IOException, InterruptedException {
 
 
@@ -86,6 +110,35 @@ public class DownloadPreparationService {
         return ResponseEntity.ok()
                 .headers(headers)
                 .contentLength(videoFile.length())
+                .body(streamResource);
+    }
+
+    // Returns a audio download to the Client in .m4a format
+    public ResponseEntity<InputStreamResource> clientDownloadAudio() throws IOException, InterruptedException {
+
+
+        // Put the Video into an Input Stream and make a InputStream Resource out of it
+        InputStream audioInputStream = new FileInputStream(audioFile);
+        InputStreamResource streamResource = new InputStreamResource(audioInputStream);
+        // after the InputStream wrote the video to inputStreamResource, the stream can be closed
+
+
+
+        // Initialize new HTTP-Headers
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentDispositionFormData("attachment", myDownloadObject.getUniqueVideoNameAudio);
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+
+        // if the video File exists then delete it from server
+        // this makes sure that the clients Videos don't stay on the server after download
+
+
+
+        // Return the video as a ResponseEntity
+        // Put the Video in the Body of the HTTP-Response
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(audioFile.length())
                 .body(streamResource);
     }
 

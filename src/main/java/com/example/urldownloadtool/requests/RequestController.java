@@ -34,6 +34,25 @@ public class RequestController {
        
     }
 
+    @PostMapping("/api/processingAudio")
+    public ResponseEntity<InputStreamResource> processAudio(@RequestParam(name="url") String urlParam,DownloadPreparationService downloadprepService) throws IOException, InterruptedException{
+
+
+
+        // Safe clients passed Parameter to a variable
+        downloadprepService.safeUrlParam(urlParam);
+
+        // this starts the download process it uses the path to yt-dlp binary and the passed parameter URL to download a video
+        downloadprepService.runDownloaderAudio();
+
+
+
+        // return the video as download to the client
+        return downloadprepService.clientDownloadAudio();
+
+    }
+
+
     
 
     
