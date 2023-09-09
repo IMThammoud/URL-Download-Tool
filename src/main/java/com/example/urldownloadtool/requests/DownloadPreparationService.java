@@ -44,7 +44,9 @@ public class DownloadPreparationService {
         // myDownloadObject.myURL has to be set first with safeUrlParam() before executing this method here > first safeUrlParam() then runDownloader()
         // Arguments for yt-dlp has to be added to the processbuilder like "-o videos/video.mp4" which will specify the path where the video will be downloaded
         myDownloadObject.setBinaryType();
-        ProcessBuilder myProcessBuilder = new ProcessBuilder(myDownloadObject.pathToBinary,"-o" + myDownloadObject.uniqueVideoName, myDownloadObject.myUrl);
+
+        // -S prefers mp4 and m4a downloading, if its not available some other formats will be downloaded and maybe result in error because clientDownload() only finds files with .mp4 ending.
+        ProcessBuilder myProcessBuilder = new ProcessBuilder(myDownloadObject.pathToBinary,"-S res,ext:mp4:m4a --recode mp4","-o", myDownloadObject.uniqueVideoName, myDownloadObject.myUrl);
         String currentDirectory = System.getProperty("user.dir");
 
         myProcessBuilder.directory(new File(currentDirectory));

@@ -17,3 +17,4 @@ For local testing purposes there is a Windows binary too.
 ~~* Build Scheduled Jobs to delete the videos from the Server after Client download~~
 * --> Delete Schedule now compares current Date with videoDate and deletes it if its older than 10 Minutes
 * --> The Videos Lastmodified Date had to be set manually on server so the difference between CurrentDate and VideoDate makes sense.
+* --> Video Downloads are set to prefer mp4/m4a format, if not available it will download some other format and maybe result in error if its not mp4 or m4a
