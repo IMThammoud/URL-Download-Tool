@@ -3,21 +3,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdn.simplecss.org/simple.min.css">
 </head>
 <body>
-    <h1 style="text-align: center;">YT-Downloader</h1>
-    <h2 style="text-align: center;">This Html-Page is located at /resources/static</h2>
+<div style="margin-bottom: 150px;text-align: center">
+   <img style="width: 70%" src="capylogo.png">
 
-    <p style="text-align: center"> Video Downloader</p>
+</div>
+
+    <h3 style="text-align: center"> VIDEO</h3>
     <form style="text-align: center;" action="/api/processing" method="post">
         <input type="text" name="url" placeholder="URL to Download Video MP4">
         <input type="submit" value="Download Video">
 
     </form>
 
-    <p style="text-align: center"> Audio Downloader</p>
-    <form style="text-align: center;" action="/api/processingAudio" method="post">
+    <h3 style="text-align: center"> AUDIO</h3>
+    <form style="text-align: center" action="/api/processingAudio" method="post">
         <input type="text" name="url" placeholder="URL to Download Audio">
         <input type="submit" value="Download Audio">
     </form>
