@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import org.apache.catalina.connector.Response;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class RequestController {
+public class RequestController implements ErrorController {
     
     @PostMapping("/api/processing")
     public ResponseEntity<InputStreamResource> processVideo(@RequestParam(name="url") String urlParam,DownloadPreparationService downloadprepService) throws IOException, InterruptedException{
@@ -50,6 +51,10 @@ public class RequestController {
         // return the video as download to the client
         return downloadprepService.clientDownloadAudio();
 
+    }
+    @PostMapping("/error")
+    public String errorMessage(){
+        return "Something gone wrong, Please make sure you pasted an URL into the form";
     }
 
 
